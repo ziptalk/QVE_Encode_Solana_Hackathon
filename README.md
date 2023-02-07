@@ -1,7 +1,7 @@
 # QVE_Encode_Solana_Hackathon
-QVE for Solana hackathon of Encode Club
+QVE Protocol for Solana hackathon of Encode Club
 
-QVE Protocol.
+
 
 The idea behind QVE is simple. We are a team operating an arbitrage and market making bot. It is quite profitable.
 
