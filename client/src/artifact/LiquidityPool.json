@@ -119,9 +119,60 @@
 						"type": "uint256"
 					}
 				],
-				"name": "addLiquidity",
+				"name": "addLiquidity_1",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount1",
+						"type": "uint256"
+					}
+				],
+				"name": "addLiquidity_2",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "getLiquidityValue_1",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "getLiquidity_2",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -267,7 +318,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/DEPOSIT/LiquidityPool.sol": "LiquidityPool"
+			"contracts/QVE/LiquidityPool.sol": "LiquidityPool"
 		},
 		"evmVersion": "paris",
 		"libraries": {},
@@ -281,12 +332,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/DEPOSIT/LiquidityPool.sol": {
-			"keccak256": "0x17b2bd2aec9af3bcac1d25c940d7bde92fc0829e1e53fa2bd35928a450b4cb30",
+		"contracts/QVE/LiquidityPool.sol": {
+			"keccak256": "0xdfd94e1e4a425cc4824028872f7b5990ec849c3802f71dc2b8297f88426c7fc2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c761d7ecb6b68dbd17bb602d92e465dfa132a4a3b8c42973f17462c5fd3edb14",
-				"dweb:/ipfs/QmdedH1xTwmR7rBGuxcTe4QAL5GyWb1Hi5jrMjuQ4GgbQ5"
+				"bzz-raw://021e824a9a10ce7ed535702883f4f984e40bc9bbecad48a8479e0d0276470d57",
+				"dweb:/ipfs/QmVs1WyDtkuFv5k4o9fLhPSKqjaDqPEdTnVUZYigdnNdJ9"
 			]
 		}
 	},

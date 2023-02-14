@@ -50,8 +50,6 @@ padding-left: 10px;
 width: 100%;
 height: 40px;
 left: 10px;
-font-family: 'Inter';
-font-style: normal;
 font-weight: 700;
 font-size: 16px;
 line-height: 19px;
@@ -71,8 +69,6 @@ justify-content: center;
 align-items: center;
 width: 90%;
 height: 36px;
-font-family: 'Inter';
-font-style: normal;
 font-weight: 600;
 font-size: 14px;
 line-height: 17px;
@@ -142,7 +138,8 @@ function Navbar () {
         navigate("/stakePage");
     }
     if (selectedOption == 'Connect Wallet') {
-      localStorage.setItem('preWalletCount', JSON.stringify(1))
+      localStorage.setItem('preWalletCount', JSON.stringify(9));
+      window.location.reload();
     }
 
     if (selectedOption == "Disconnect") {

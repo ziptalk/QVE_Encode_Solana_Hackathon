@@ -15,8 +15,6 @@ const Asset = styled.div`
 
 /* Heading 2 */
 width: 373px;
-font-family: 'Inter';
-font-style: normal;
 font-weight: 700;
 font-size: 24px;
 line-height: 36px;
@@ -79,9 +77,6 @@ border-radius: 16px;
 flex: none;
 order: 0;
 flex-grow: 0;
-
-font-family: 'Inter';
-font-style: normal;
 font-weight: 600;
 font-size: 14px;
 line-height: 17px;
@@ -118,10 +113,6 @@ border-radius: 16px;
 flex: none;
 order: 1;
 flex-grow: 0;
-
-
-font-family: 'Inter';
-font-style: normal;
 font-weight: 600;
 font-size: 14px;
 line-height: 17px;
@@ -170,8 +161,6 @@ border-radius: 16px;
 `;
 
 const ConnectWallet = styled.div`
-font-family: 'Inter';
-font-style: normal;
 font-weight: 700;
 font-size: 18px;
 line-height: 24px;
@@ -205,22 +194,21 @@ border-radius: 16px;
 
 function MainWalletX({preWalletCount, setPreWalletCount, setAccount, setStakeContract, account, stakeContract, usdtContract, setUsdtContract, liquidityContract, setLiquidityContract}) {
     const web3 = new Web3(window.ethereum);
-    const depositContractAddress = "0xF1EbEC1689b771464DB6258E48E200A2367C49eB";
-    const usdtAddress= "0x0220a9C442218B281Cd866D84C9194Db9fbDf673";
-    const AddLiquidityAddress = "0xf8e81D47203A594245E36C48e151709F0C19fBe8";
-    let Usdtcontract = null;
+    const depositContractAddress = "0x3f89E1213f1139f5f70dfCb5116028c4102421FB";
+    const DepositContract = new web3.eth.Contract(DepositArtifact.output.abi, depositContractAddress);
+    const usdtAddress= "0xc89Cc45deAa953bCfFEBcdC83E7456B06bAb2cb3";
+    const Usdtcontract = new web3.eth.Contract(UsdtArtifact.output.abi, usdtAddress);
 
     async function getAccount() {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const balance = await web3.eth.getBalance(accounts[0]);
         setAccount(accounts[0]);
         localStorage.setItem("user", JSON.stringify(accounts[0]));
-        const Stakecontract = new web3.eth.Contract(DepositArtifact.output.abi, depositContractAddress);
+        const DepositContract = new web3.eth.Contract(DepositArtifact.output.abi, depositContractAddress);
         // console.log("STAKECONTRACT", Stakecontract);
-        Usdtcontract = new web3.eth.Contract(UsdtArtifact.output.abi, usdtAddress);
         //const LiquidityContract = new web3.eth.Contract(LiquidityArtifact , AddLiquidityAddress);
         setUsdtContract(Usdtcontract);
-        setStakeContract(Stakecontract);
+        setStakeContract(DepositContract);
        // setLiquidityContract(LiquidityContract);
 }
 
@@ -235,7 +223,12 @@ function MainWalletX({preWalletCount, setPreWalletCount, setAccount, setStakeCon
     getAccount();
     setPreWalletCount(null);
    }
-    
+   console.log('prewalletlocal', localStorage.getItem('preWalletCount'));
+   if (localStorage.getItem('preWalletCount') === '9') {
+    console.log('prewallet9');
+    setPreWalletCount(1);
+    localStorage.removeItem('preWalletCount');
+}
 // console.log("lc in wallet",localStorage.getItem('user'))
     return(
         

@@ -20,8 +20,6 @@ const EContainer = styled.div`
 `;
 
 const Text = styled.div`
-font-family: 'Inter';
-font-style: normal;
 color: #FFFFFF;
 `;
 
@@ -36,8 +34,6 @@ const Input = styled.input`
 all: unset;
 background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #202025;
 border-radius: 12px;
-font-family: 'Inter';
-font-style: normal;
 font-weight: 700;
 font-size: 18px;
 line-height: 24px;
@@ -53,8 +49,6 @@ const Button = styled.button`
 all: unset;
 width: 324px;
 height: 55px;
-font-family: 'Inter';
-font-style: normal;
 font-weight: 600;
 font-size: 14px;
 line-height: 17px;
@@ -72,53 +66,37 @@ const Image = styled.img`
 function AddLiquidity({setLiquidityCount}) {
     const [token, setToken] = useState(0);
     const web3 = new Web3(window.ethereum);
-    const [amount, setAmount] = useState(1);
+    const [amount, setAmount] = useState(0);
     const [qvePrice, setQvePrice] = useState(0);
     const [a, setA] = useState(0);
     const [b, setB] = useState(0);
     let account = JSON.parse(localStorage.getItem('user'));
     
-    const AddLiquidityAddress = "0x38f36a2fbAEFe46a00623e1b6245ca21A7F70895";
-    const QveAddress = "0x7c10E21A952C1979f12aE63bCA789DA3F9B2fE20";
-    const arbQveAddress = "0x25d4778f9909b0a9819136B642f72c5388c0A534";
+    const AddLiquidityAddress = "0xb91bC1Ac7c73e8e004382d4355E726B956839577";
+    const QveAddress = "0x225F24F526f29B901E07877Ab8989097990e905E";
+    const arbQveAddress = "0x06C7316bF280e8F3d82DC36c97f247F7b9b833B5";
     const LiquidityContract = new web3.eth.Contract(LiquidityArtifact.output.abi , AddLiquidityAddress);
     const QveContract = new web3.eth.Contract(QveArtifact.output.abi, QveAddress);
     const arbQveContract = new web3.eth.Contract(arbQveArtifact.output.abi, arbQveAddress);
     account  = JSON.parse(localStorage.getItem('user'));
     function AddingLiquidity(amount) {
 
-        QveContract.methods.approve(AddLiquidityAddress, amount).send({ from: account });;
+        QveContract.methods.approve(AddLiquidityAddress, web3.utils.toBN(amount * 10**18)).send({ from: account });;
 
-        arbQveContract.methods.approve(AddLiquidityAddress, amount).send({ from: account });
+        arbQveContract.methods.approve(AddLiquidityAddress, web3.utils.toBN(amount * 10**18)).send({ from: account });
         
-        LiquidityContract.methods.addLiquidity(amount).send({ from: account });
+        LiquidityContract.methods.addLiquidity_1(web3.utils.toBN(amount * 10**18)).send({ from: account });
 
         
     }
-    let getQVEPoolData = LiquidityContract.methods.getSwapAtoBReturnAmount(amount).call();
+    let getQVEPoolData = LiquidityContract.methods.getLiquidityValue_1(amount).call();
+    console.log(getQVEPoolData);
     let QvePrice = 0;
    
     getQVEPoolData.then((result) => {
-        // console.log("RESULT", result / 10**18);
-        setQvePrice(result / 10**18);
-      });
-    //   console.log('amount', amount)
-    let getTTotalA = LiquidityContract.methods.getTotalA().call();
-    getTTotalA.then((result)=> {
-        // console.log("RESULTA", result / 10 ** 18);
-        setA(result / 10 ** 18);
+        setQvePrice(result);
       });
 
-      let getTTotalB = LiquidityContract.methods.getTotalB().call();
-    getTTotalB.then((result)=> {
-        // console.log("RESULTB", result / 10 ** 18);
-        setB(result / 10 ** 18);
-      });
-
-    //   console.log("IIIIIIII", LiquidityContract.methods)
-      let OutputB = (amount/10**18) * (b)/a;
-    //   console.log("OUPUTTT", (amount/10**18) * (b)/a);
-    //   let getTotalArb = LiquidityContract.methods. 
     return(
         <Container style={{position: 'relative'}}>
 
@@ -142,7 +120,7 @@ function AddLiquidity({setLiquidityCount}) {
                         <Text style={{fontWeight: '700', fontSize: '9px', lineHeight: '11px', color: '#5C5E81'}}>0.000000 ATOM</Text>
                     </EContainer>
                     <EContainer style={{height: '4px'}}></EContainer>
-                    <Input value={amount} onChange={(e) => setAmount(e.target.value)}></Input>
+                    <Input value={amount} placeholder="0" onChange={(e) => setAmount(e.target.value)}></Input>
                 </EContainer>
                 </EContainer>
             </QveArbContainer>
@@ -161,7 +139,7 @@ function AddLiquidity({setLiquidityCount}) {
                         <Text style={{fontWeight: '700', fontSize: '9px', lineHeight: '11px', color: '#5C5E81'}}>0.000000 ATOM</Text>
                     </EContainer>
                     <EContainer style={{height: '4px'}}></EContainer>
-                    <Input value={OutputB/2+0.2417}></Input>
+                    <Input value={qvePrice} placeholder="0"></Input>
                 </EContainer>
                 </EContainer>
             </QveArbContainer>

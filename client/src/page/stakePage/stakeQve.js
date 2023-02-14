@@ -20,8 +20,6 @@ position: relative;
 `;
 
 const Text = styled.div`
-font-family: 'Inter';
-font-style: normal;
 
 `;
 
@@ -43,21 +41,17 @@ const Input = styled.input`
 all:  unset;
 background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #202025;
 border-radius: 12px;
-font-family: 'Inter';
-font-style: normal;
 font-weight: 400;
 font-size: 16px;
 line-height: 19px;
 text-align: right;
 color: #B7B8CD;
-width: 200px
+width: 50%;
 `
 const Button = styled.button`
 all: unset;
 width: 90%;
 height: 55px;
-font-family: 'Inter';
-font-style: normal;
 font-weight: 600;
 font-size: 14px;
 line-height: 17px;
@@ -68,21 +62,64 @@ border-radius: 16px;
 cursor: pointer;
 `;
 
+const InputContainer = styled.div`
+background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #202025;
+border-radius: 12px;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+text-align: left;
+color: #B7B8CD;
+width: 200px;
+display: flex;
+justify-Content: flex-end;
+align-items: center;
+`;
+
+const MaxButton = styled.button`
+all: unset;
+cursor: pointer;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+width: 47.78px;
+height: 21px;
+background: #5C5E81;
+border-radius: 16px;
+font-weight: 700;
+font-size: 9px;
+line-height: 11px;
+letter-spacing: 0.02em;
+
+/* dark/white */
+
+color: #FFFFFF;
+`;
+
 function StakeQve({setCount}) {
     const [amount, setAmount] = useState('');
+    const [qveBalance, setQveBalance] = useState('');
     const web3 = new Web3(window.ethereum);
     let account = JSON.parse(localStorage.getItem('user'));
-    const StakeAddress = "0xD0dF443F4E73006B1b6009eE5fdB1df9E423fF94";
-    const QveAddress = "0x7c10E21A952C1979f12aE63bCA789DA3F9B2fE20"
+    const StakeAddress = "0xbe34143831efc6E44724C4499D8297833552ac5B";
+    const QveAddress = "0x225F24F526f29B901E07877Ab8989097990e905E"
     const QveContract = new web3.eth.Contract(QveArtifact.output.abi, QveAddress);
     const stakeContract = new web3.eth.Contract(stakeArtifact.output.abi, StakeAddress);
 
     function stakeQve() {
-        QveContract.methods.approve(StakeAddress, amount).send({ from: account });
+        QveContract.methods.approve(StakeAddress, web3.utils.toBN(amount * 10**18)).send({ from: account });
 
-        stakeContract.methods.stake_Qve(amount).send({ from: account });
+        stakeContract.methods.StakeQVE(web3.utils.toBN(amount * 10**18)).send({ from: account });
     }
-
+    console.log(account)
+    console.log(QveContract.methods);
+    const availableQVE = QveContract.methods.balanceOf(account).call();
+    console.log(availableQVE)
+    availableQVE.then((result) => {
+        console.log('QVEbalance',result);
+        setQveBalance(result);
+    })
 
     return (
         <EContainer style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -100,18 +137,28 @@ function StakeQve({setCount}) {
                     <EContainer style={{display: 'flex', flexDirection: 'column'}}>
                         <Text style={{fontWeight: '700', fontSize: '18px', lineHeight: '24px', color: '#FFFFFF'}}>QVE</Text>
                         <Text style={{fontWeight: '700', fontSize: '12px', lineHeight: '15px', color: '#B7B8CD'}}>12.3%</Text>
+                    </EContainer><InputContainer>
+                    <EContainer style={{display: 'flex', gap: '5px'}}>
+                    <Input placeholder="Amount" style={{flexGrow: '1', paddingRight: '5px'}} value={amount} onChange={(e) => setAmount(e.target.value)}></Input>
+                    <MaxButton onClick={() => setAmount((qveBalance/10**18).toFixed(2))}>Max</MaxButton>
                     </EContainer>
-                    <Input placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)}></Input>
+                    <EContainer style={{width: '10px'}}/>
+                    
+                    </InputContainer>
                 </EContainer>
                 <EContainer style={{height: '5px'}} />
                 <EContainer style={{display: 'flex', flexDirection: 'row', justifyContent:'flex-end'}}>
                         <Text style={{fontWeight: '700', fontSize: '9px', lineHeight: '11px', color: '#FFFFFF'}}>Available</Text>
                         <EContainer style={{width: '5px'}}></EContainer>
-                        <Text style={{fontWeight: '700', fontSize: '9px', lineHeight: '11px', color: '#5C5E81'}}>0.000000 QVE</Text>
+                        <Text style={{fontWeight: '700', fontSize: '9px', lineHeight: '11px', color: '#5C5E81'}}>{(qveBalance / 10**18).toFixed(2)} QVE</Text>
                     </EContainer>
             </DataContainer>
             <EContainer style={{height: '15px'}}/>
-            <Button onClick={() => stakeQve()}>Amount is Empty</Button>
+            {amount === '' ? 
+            <Button style={{background: '#5C5E81'}}>Amount is Empty</Button> 
+            : 
+            <Button onClick={() => stakeQve()}>Stake</Button>
+            }
         </StakeContainer>
         </EContainer>
         <Image style={{height: '100%', width: '100%'}} src={BackgroundImage}/>
